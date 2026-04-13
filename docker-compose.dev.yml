@@ -8,3 +8,15 @@ services:
       - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
     command: >
       sh -c "trap exit TERM; /generate-cert.sh; /deploy-hook.sh; echo Ready; sleep infinity"
+
+  database:
+    depends_on: {}
+
+  mailman-core:
+    depends_on:
+      database:
+        condition: service_started
+
+networks:
+  taramail:
+    external: false

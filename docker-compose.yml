@@ -31,17 +31,19 @@ services:
     image: postgres:16-alpine
     volumes:
       - mailman-database-data:/var/lib/postgresql/data
+    secrets:
+      - dbpass
     environment:
-      - POSTGRES_DB=mailmandb
-      - POSTGRES_USER=mailman
-      - POSTGRES_PASSWORD=${MAILMAN_DB_PASS}
+      - POSTGRES_DB=${DBNAME}
+      - POSTGRES_USER=${DBUSER}
+      - POSTGRES_PASSWORD_FILE=/run/secrets/dbpass
     networks:
       default:
         aliases:
           - taralists-database
     restart: always
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready --dbname mailmandb --username mailman" ]
+      test: [ "CMD-SHELL", "pg_isready --dbname ${DBNAME} --username ${DBUSER}" ]
       start_period: 10s
       interval: 10s
       timeout: 5s
@@ -54,9 +56,9 @@ services:
         condition: service_healthy
     volumes:
       - mailman-core-data:/opt/mailman/
-      - ./mailman/mailman-extra.cfg:/opt/mailman/mailman-extra.cfg:ro
+      - ./mailman-core/mailman-extra.cfg:/opt/mailman/mailman-extra.cfg:ro
     environment:
-      - DATABASE_URL=postgresql://mailman:${MAILMAN_DB_PASS}@taralists-database/mailmandb
+      - DATABASE_URL=postgresql://${DBUSER}:${DBPASS}@taralists-database/${DBNAME}
       - DATABASE_TYPE=postgres
       - DATABASE_CLASS=mailman.database.postgresql.PostgreSQLDatabase
       - HYPERKITTY_API_KEY=${HYPERKITTY_API_KEY}
@@ -78,9 +80,9 @@ services:
         condition: service_started
     volumes:
       - mailman-web-data:/opt/mailman-web-data
-      - ./mailman/settings_local.py:/opt/mailman-web-data/settings_local.py:ro
+      - ./mailman-web/settings_local.py:/opt/mailman-web-data/settings_local.py:ro
     environment:
-      - DATABASE_URL=postgresql://mailman:${MAILMAN_DB_PASS}@taralists-database/mailmandb
+      - DATABASE_URL=postgresql://${DBUSER}:${DBPASS}@taralists-database/${DBNAME}
       - DATABASE_TYPE=postgres
       - HYPERKITTY_API_KEY=${HYPERKITTY_API_KEY}
       - SECRET_KEY=${SECRET_KEY}
@@ -133,5 +135,10 @@ volumes:
   certbot-certs:
   certbot-www:
   mailman-core-data:
-  mailman-database-data:
   mailman-web-data:
+  mailman-database-data:
+
+
+secrets:
+  dbpass:
+    environment: DBPASS
