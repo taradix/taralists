@@ -1,0 +1,35 @@
+x-build-args: &python-build-args
+  PYTHON_VERSION: ${PYTHON_VERSION:-3.13.10}
+name: taralists
+
+services:
+  certbot:
+    image: certbot/certbot:v5.4.0
+    depends_on:
+      dockerapi:
+        condition: service_started
+      unbound:
+        condition: service_healthy
+    volumes:
+      - ./certbot/deploy-hook.sh:/deploy-hook.sh:ro
+      - certbot-certs:/etc/letsencrypt
+      - certbot-www:/var/www/html
+    environment:
+      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
+    networks:
+      default:
+        aliases:
+          - taralists-certbot
+    command: >
+      sh -c "trap exit TERM; while :; do
+        certbot renew --webroot --webroot-path=/var/www/html --deploy-hook /deploy-hook.sh;
+        sleep 12h;
+      done"
+    entrypoint: ""
+    restart: always
+    healthcheck:
+      test: [ "CMD", "test", "-e", "/etc/letsencrypt/live/fullchain.pem" ]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 15
