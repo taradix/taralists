@@ -1,15 +1,8 @@
-x-build-args: &python-build-args
-  PYTHON_VERSION: ${PYTHON_VERSION:-3.13.10}
 name: taralists
 
 services:
   certbot:
     image: certbot/certbot:v5.4.0
-    depends_on:
-      dockerapi:
-        condition: service_started
-      unbound:
-        condition: service_healthy
     volumes:
       - ./certbot/deploy-hook.sh:/deploy-hook.sh:ro
       - certbot-certs:/etc/letsencrypt
@@ -33,3 +26,42 @@ services:
       interval: 10s
       timeout: 5s
       retries: 15
+
+  nginx:
+    build: nginx
+    depends_on:
+      certbot:
+        condition: service_healthy
+      mailman-web:
+        condition: service_started
+    volumes:
+      - certbot-www:/web:ro
+      - certbot-certs:/etc/letsencrypt:ro
+      - mailman-web-data:/opt/mailman-web-data:ro
+      - ./nginx/conf.d/:/etc/nginx/conf.d/:z
+    environment:
+      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
+      - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
+    networks:
+      default:
+        ipv4_address: ${IPV4_NETWORK:-172.22.1}.240
+        aliases:
+          - taralists-nginx
+    restart: always
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-taralists
+    ipam:
+      driver: default
+      config:
+        - subnet: ${IPV4_NETWORK:-172.22.1}.0/24
+  taramail:
+    external: true
+    name: taramail_default
+
+volumes:
+  certbot-certs:
+  certbot-www:
