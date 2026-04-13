@@ -3,3 +3,13 @@
 
 # Lint checker
 node_modules/
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS specific files
+.DS_Store
+Thumbs.db
