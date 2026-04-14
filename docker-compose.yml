@@ -74,7 +74,7 @@ services:
     stop_grace_period: 30s
 
   mailman-web:
-    image: maxking/mailman-web:0.4
+    image: maxking/mailman-web:0.5
     depends_on:
       database:
         condition: service_healthy
