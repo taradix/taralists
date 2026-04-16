@@ -1,6 +1,6 @@
 FROM maxking/mailman-web:0.5
 
-COPY mailman-provision.py /usr/local/bin/mailman-provision.py
+COPY mailman-provision.py /usr/local/bin/
 
 RUN sed -i \
         -e 's|psql -P pager=off $DATABASE_URL -c .\\l.|pg_isready -d $DATABASE_URL|' \

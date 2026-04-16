@@ -11,5 +11,5 @@ relayhost = [localhost]:25
 recipient_delimiter = +
 owner_request_special = no
 
-transport_maps = hash:/opt/mailman/var/data/postfix_lmtp
-relay_domains = hash:/opt/mailman/var/data/postfix_domains
+transport_maps = texthash:/opt/mailman/var/data/postfix_lmtp
+relay_domains = texthash:/opt/mailman/var/data/postfix_domains
