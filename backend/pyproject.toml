@@ -1,0 +1,90 @@
+[project]
+name = "taralists"
+version = "0.0.0"
+description = "Liste de diffusion à Taram."
+authors = [
+    {name = "Marc Tardif", email = "marc@taram.ca"},
+]
+readme = "README.rst"
+repository = "https://github.com/taradix/taralists"
+packages = [
+    {include = "taralists"},
+]
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "attrs (>=26.1.0,<26.2.0)",
+    "more-itertools (>=11.0.1,<11.1.0)",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=9.0.0,<10.0.0",
+  "pytest-xdocker>=0.2.8,<1.0.0",
+]
+
+check = [
+  "ruff>=0.15.0,<1.0.0",
+]
+
+[project.entry-points."pytest11"]
+taralists-services = "taralists.testing.services"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+fix = true
+lint.select = [
+    # flake8-2020
+    "YTT",
+    # flake8-bandit
+    "S",
+    # flake8-bugbear
+    "B",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # mccabe
+    "C90",
+    # pycodestyle
+    "E", "W",
+    # pyflakes
+    "F",
+    # pygrep-hooks
+    "PGH",
+    # pyupgrade
+    "UP",
+    # ruff
+    "RUF",
+    # tryceratops
+    "TRY",
+]
+lint.ignore = [
+    # LineTooLong
+    "E501",
+    # DoNotAssignLambda
+    "E731",
+    # Create your own exception
+    "TRY002",
+    # Avoid specifying long messages outside the exception class
+    "TRY003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S106"]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "taralists",
+    "tests",
+]

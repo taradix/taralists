@@ -18,5 +18,35 @@ jobs:
         with:
           node-version: 24
 
+      - name: Set up Python environment
+        uses: ./.github/actions/setup-uv-env
+        with:
+          extras: check
+          python-version: "3.14"
+          working-directory: backend
+
       - name: Run check target
         run: make check
+
+  backend-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.13', '3.14']
+      fail-fast: false
+    steps:
+      - name: Check out
+        uses: actions/checkout@v6
+        with:
+          submodules: true
+
+      - name: Set up Python environment
+        uses: ./.github/actions/setup-uv-env
+        with:
+          extras: test
+          python-version: ${{ matrix.python-version }}
+          working-directory: backend
+
+      - name: Run backend test target
+        working-directory: backend
+        run: make test
