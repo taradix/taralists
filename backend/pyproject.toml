@@ -6,17 +6,15 @@ authors = [
     {name = "Marc Tardif", email = "marc@taram.ca"},
 ]
 readme = "README.rst"
-repository = "https://github.com/taradix/taralists"
-packages = [
-    {include = "taralists"},
-]
+
 requires-python = ">=3.12,<4.0"
 dependencies = [
-    "attrs (>=26.1.0,<26.2.0)",
-    "more-itertools (>=11.0.1,<11.1.0)",
+    "attrs>=26.1.0,<26.2.0",
+    "more-itertools>=11.0.1,<11.1.0",
 ]
 
 [project.optional-dependencies]
+
 test = [
   "pytest>=9.0.0,<10.0.0",
   "pytest-xdocker>=0.2.8,<1.0.0",
@@ -29,6 +27,9 @@ check = [
 [project.entry-points."pytest11"]
 taralists-services = "taralists.testing.services"
 
+[project.urls]
+Repository = "https://github.com/taradix/taralists"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -37,7 +38,9 @@ build-backend = "hatchling.build"
 target-version = "py312"
 line-length = 120
 fix = true
-lint.select = [
+
+[tool.ruff.lint]
+select = [
     # flake8-2020
     "YTT",
     # flake8-bandit
@@ -69,7 +72,7 @@ lint.select = [
     # tryceratops
     "TRY",
 ]
-lint.ignore = [
+ignore = [
     # LineTooLong
     "E501",
     # DoNotAssignLambda
@@ -83,6 +86,8 @@ lint.ignore = [
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "S106", "S310"]
 
+# Pytest options:
+#   https://docs.pytest.org/en/6.2.x/reference.html#ini-options-ref
 [tool.pytest.ini_options]
 testpaths = [
     "taralists",
