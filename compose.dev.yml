@@ -10,6 +10,11 @@ services:
       database:
         condition: service_started
 
+  mailman-web:
+    environment:
+      DJANGO_ALLOWED_HOSTS: "*"
+      MAILMAN_HOST_IP: "*"
+
 networks:
   taramail:
     external: false

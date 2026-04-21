@@ -21,7 +21,6 @@ def env_vars(project):
     """
     return {
         "COMPOSE_PROJECT_NAME": project,
-        "MM_HOSTNAME": "0.0.0.0",  # noqa: S104
         "DBNAME": "test",
         "DBUSER": "test",
         "DBPASS": "test",
@@ -91,6 +90,14 @@ def mailman_core_service(compose_server):
     """Mailman-core service fixture."""
     server = compose_server("Directory /opt/mailman/var")
     with server.run("mailman-core") as service:
+        yield service
+
+
+@pytest.fixture(scope="session")
+def mailman_web_service(compose_server, mailman_core_service):
+    """Mailman-web service fixture."""
+    server = compose_server("Domain test\\.local")
+    with server.run("mailman-web") as service:
         yield service
 
 

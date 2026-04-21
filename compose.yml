@@ -80,6 +80,12 @@ services:
         aliases:
           - taralists-mailman-web
     restart: always
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://taralists-mailman-web:8000/hyperkitty/')"]
+      start_period: 60s
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   postfix:
     build: postfix
@@ -107,7 +113,7 @@ services:
       certbot:
         condition: service_healthy
       mailman-web:
-        condition: service_started
+        condition: service_healthy
     volumes:
       - certbot-www:/web:ro
       - certbot-certs:/etc/letsencrypt:ro
