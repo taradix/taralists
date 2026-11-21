@@ -3,7 +3,7 @@ include:
   - path: ./taracert/compose.yml
 services:
   database:
-    image: postgres:18-alpine
+    image: postgres:19-alpine
     volumes:
       - mailman-database-data:/var/lib/postgresql
     secrets:
