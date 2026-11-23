@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.13, <4.0"
 
 [[package]]
@@ -36,15 +36,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/01/e1/2069291243c926a2ff1cd706c7f3eeb9b62144bf60f77c9fb9ff2fb26bd3/iniconfig-2.3.1.tar.gz", hash = "sha256:67f4b9c50da0dedf52af349e7749a80a9057a5031199791b906c3bb3ae878960", size = 21209, upload-time = "2026-10-06T22:48:38.076Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/56/43/4ca9e49d27a1fcf6bece6f6aec0ea46bb9112489b93d4b688fb415457bdb/iniconfig-2.3.1-py3-none-any.whl", hash = "sha256:9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7", size = 7552, upload-time = "2026-10-06T22:48:36.959Z" },
-]
-
-[[package]]
-name = "more-itertools"
-version = "11.2.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/52/b8/c63995bebbb9ac9c059350e0fb8c82c2420c85aeca7d34e40aecf3df9281/more_itertools-11.2.1.tar.gz", hash = "sha256:cbf08fd0af284dc69718b9b76a8e6203df624d70209ea511e4219d350c856f63", size = 154133, upload-time = "2026-10-14T18:50:30.407Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/5d/57/3c4b1c6f2e0cc29ba023802458ea3d2a996f87085559e4a5f2192d549532/more_itertools-11.2.1-py3-none-any.whl", hash = "sha256:35a7377edd1dd6608dcb2cdf534ded55ea32d49448875ad042cd3f879fb1ded0", size = 74405, upload-time = "2026-10-14T18:50:29.116Z" },
 ]
 
 [[package]]
@@ -160,7 +151,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/d1/15/082fd0428aab33d2b
 
 [[package]]
 name = "pytest-xdocker"
-version = "0.2.9"
+version = "0.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -171,9 +162,9 @@ dependencies = [
     { name = "pytest-cache" },
     { name = "pytest-xprocess" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/85/a7/5e7120f4a3fcde15ad6cb6eb7927d347da1e3c2bd77adafd51dad795262e/pytest_xdocker-0.2.9.tar.gz", hash = "sha256:19961bf0cfdf623f8d6a8c4dc477e5eb5a48ac41b7acbdad2b0ba83121e31995", size = 116973, upload-time = "2026-05-21T00:30:49.71Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/61/13/bb55d08ec24283d11051acfd2f57f7e26a130b86a1cc3977e29429fa4813/pytest_xdocker-0.3.1.tar.gz", hash = "sha256:8196ee96fd8900276e0c52a7666d946508a3599e1f2203123680da40fd521af0", size = 105115, upload-time = "2026-11-23T01:50:05.032Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/65/3a/d027568645c49aa256153d17c19bdef8d068e2a07fa5929282b713fac239/pytest_xdocker-0.2.9-py3-none-any.whl", hash = "sha256:dc6194a2a5d2855cbb4ead1202f2b11dde48fd3db44c4f49ea8017849a13a6aa", size = 20425, upload-time = "2026-05-21T00:30:48.487Z" },
+    { url = "https://files.pythonhosted.org/packages/94/ee/347d8059de2590065890d68a348b9bdb4ba2963c83b24e673637ad68119a/pytest_xdocker-0.3.1-py3-none-any.whl", hash = "sha256:130667239588f877e92db16d5ab95ba06f648189e0e156123b2b5b0a9535fb7f", size = 21796, upload-time = "2026-11-23T01:50:03.833Z" },
 ]
 
 [[package]]
@@ -218,10 +209,6 @@ wheels = [
 name = "taralists"
 version = "0.0.0"
 source = { editable = "." }
-dependencies = [
-    { name = "attrs" },
-    { name = "more-itertools" },
-]
 
 [package.optional-dependencies]
 check = [
@@ -234,10 +221,8 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "attrs", specifier = ">=26.1.0,<26.2.0" },
-    { name = "more-itertools", specifier = ">=11.2.0,<11.3.0" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=9.0.0,<10.0.0" },
-    { name = "pytest-xdocker", marker = "extra == 'test'", specifier = ">=0.2.8,<1.0.0" },
+    { name = "pytest-xdocker", marker = "extra == 'test'", specifier = ">=0.3.1,<1.0.0" },
     { name = "ruff", marker = "extra == 'check'", specifier = ">=0.15.0,<1.0.0" },
 ]
 provides-extras = ["test", "check"]
