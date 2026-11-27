@@ -1,4 +1,4 @@
-name: taralists
+name: taralists-test
 include:
   - path: ./taracert/compose.dev.yml
 services:
