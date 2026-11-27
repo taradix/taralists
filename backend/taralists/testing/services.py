@@ -1,26 +1,22 @@
 """Service fixtures."""
 
 import re
+import ssl
 from functools import partial
+from http.client import HTTPSConnection
 
 import pytest
 from pytest_xdocker.compose import ComposeServer, find_compose_files
 
 
 @pytest.fixture(scope="session")
-def project():
-    return "test"
-
-
-@pytest.fixture(scope="session")
-def env_vars(project):
+def env_vars():
     """Environment variables for the services.
 
     Static because they are persisted in volumes, e.g. database-vol-1.
     """
     server_hostname = "test.local"
     return {
-        "COMPOSE_PROJECT_NAME": project,
         "DBNAME": "test",
         "DBUSER": "test",
         "DBPASS": "test",
@@ -49,10 +45,9 @@ def env_file(env_vars, request):
 
 
 @pytest.fixture(scope="session")
-def compose_server(project, env_file, process, request):
+def compose_server(env_file, process, request):
     return partial(
         ComposeServer,
-        project=project,
         env_file=env_file,
         compose_files=find_compose_files(request.config.rootdir),
         process=process,
@@ -89,3 +84,19 @@ def postfix_service(compose_server):
     server = compose_server("starting the Postfix mail system")
     with server.run("postfix") as service:
         yield service
+
+
+@pytest.fixture(scope="session")
+def nginx_service(compose_server):
+    """Nginx service fixture."""
+    server = compose_server("start worker process")
+    with server.run("nginx") as service:
+        yield service
+
+
+@pytest.fixture
+def nginx_client(nginx_service):
+    """Client to the nginx service fixture, over the self-signed dev cert."""
+    client = HTTPSConnection(nginx_service.ip, timeout=5, context=ssl._create_unverified_context())  # noqa: S323
+    yield client
+    client.close()

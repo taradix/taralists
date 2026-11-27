@@ -108,7 +108,7 @@ services:
     restart: always
 
   nginx:
-    build: nginx
+    image: nginx:1.31.10-alpine
     depends_on:
       certbot:
         condition: service_healthy
@@ -118,10 +118,7 @@ services:
       - certbot-www:/web:ro
       - certbot-certs:/etc/letsencrypt:ro
       - mailman-web-data:/opt/mailman-web-data:ro
-      - ./nginx/conf.d/:/etc/nginx/conf.d/:z
-    environment:
-      SERVER_HOSTNAME: ${SERVER_HOSTNAME}
-      IPV4_NETWORK: ${IPV4_NETWORK:-172.22.1}
+      - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
     networks:
       default:
         ipv4_address: ${IPV4_NETWORK:-172.22.1}.240
