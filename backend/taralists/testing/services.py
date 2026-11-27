@@ -1,7 +1,9 @@
 """Service fixtures."""
 
 import re
+import ssl
 from functools import partial
+from http.client import HTTPSConnection
 
 import pytest
 from pytest_xdocker.compose import ComposeServer, find_compose_files
@@ -89,3 +91,19 @@ def postfix_service(compose_server):
     server = compose_server("starting the Postfix mail system")
     with server.run("postfix") as service:
         yield service
+
+
+@pytest.fixture(scope="session")
+def nginx_service(compose_server):
+    """Nginx service fixture."""
+    server = compose_server("start worker process")
+    with server.run("nginx") as service:
+        yield service
+
+
+@pytest.fixture
+def nginx_client(nginx_service):
+    """Client to the nginx service fixture, over the self-signed dev cert."""
+    client = HTTPSConnection(nginx_service.ip, timeout=5, context=ssl._create_unverified_context())  # noqa: S323
+    yield client
+    client.close()
